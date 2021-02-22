@@ -7,7 +7,7 @@ const char* password = "Mi_Password";
 WiFiServer server(80);
 
 //Se tiene un LED incorporado en terminal 2, se puede usar otro GPIO
-#define LED  15
+#define LED  2
 String estado = "";
 
 void setup() {
