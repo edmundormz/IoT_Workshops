@@ -20,8 +20,9 @@ void setup() {
 void loop() {
    delay(1000);
    
-   unsigned int distance = sonar.ping_cm();
-   Serial.print(distance);
+   //unsigned int distance = sonar.ping_cm();
+   //Serial.print(distance);
+   Serial.print(sonar.ping_cm());
    Serial.println("cm");
 
    float h = dht.readHumidity();
