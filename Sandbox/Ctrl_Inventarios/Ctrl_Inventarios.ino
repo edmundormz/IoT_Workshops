@@ -7,7 +7,7 @@
 
 /// Globar Variables
 // GPIO where the DS18B20 is connected to
-const int oneWireBus = 4;
+const int oneWireBus = 15;
 // Ultrasonic sensors pins  
 #define TRIGGER_PIN_1 32
 #define ECHO_PIN_1 33
