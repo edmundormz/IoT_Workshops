@@ -67,8 +67,8 @@ void read_door(){
 
 void read_cans(int switches_lane){
   switches_value = analogRead(switches_lane);
-  Serial.print("switches_value = ");
-  Serial.println(switches_value);
+  //Serial.print("switches_value = ");
+  //Serial.println(switches_value);
   if (switches_value < 4096){
     cant_latas = 0;
   }
