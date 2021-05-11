@@ -5,8 +5,8 @@
 // HC-SR04 Ultrasonic Sensors Library
 #include <NewPing.h>
 
-/// Globar Variables
-// GPIO where the DS18B20 is connected to
+/// Global Variables
+// GPIO where the DS18B20 temperature sensor is connected to
 const int oneWireBus = 15;
 // Ultrasonic sensors pins  
 #define TRIGGER_PIN_1 32
@@ -22,8 +22,10 @@ const int cans_lane_1 = 34; // pin where lane 1 is connected to
 const int cans_lane_2 = 39; // pin where lane 2 is connected to
 int switches_value = 0;
 int cant_latas = 4;
+int cant_latas_sonar = 0;
+int dist_latas = 0;
 
-//// Instances Declarations
+/// Instances Declarations
 // OneWire protocol instance and temperature sensor declaration
 OneWire oneWire(oneWireBus);
 DallasTemperature tmp_sensor(&oneWire);
@@ -40,6 +42,7 @@ void setup() {
   digitalWrite(led_pin, LOW); // initialize indicator led in off
 }
 
+///Funciones
 void read_temperature(){
   tmp_sensor.requestTemperatures(); 
   float temperatureC = tmp_sensor.getTempCByIndex(0);
@@ -48,10 +51,32 @@ void read_temperature(){
 }
 
 void read_distances(){
-   Serial.print(sonar_1.ping_cm());
+/*   Serial.print(sonar_1.ping_cm());
    Serial.println("cm 1");
    Serial.print(sonar_2.ping_cm());
    Serial.println("cm 2");
+*/
+   dist_latas = sonar_1.ping_cm();
+   if(dist_latas < 40){
+    cant_latas_sonar = 0;
+   }
+   if(dist_latas < 35){
+    cant_latas_sonar = 1;
+   }
+   if(dist_latas < 27){
+    cant_latas_sonar = 2;
+   }
+   if(dist_latas < 19){
+    cant_latas_sonar = 3;
+   }
+   if(dist_latas < 16){
+    cant_latas_sonar = 4;
+   }
+   if(dist_latas < 6){
+    cant_latas_sonar = 5;
+   }
+   Serial.print(cant_latas_sonar);
+   Serial.println(" latas carril 4");
 }
 
 void read_door(){
