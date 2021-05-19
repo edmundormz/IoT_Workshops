@@ -5,12 +5,15 @@ const int push_button = 27;
 unsigned long now = millis();
 unsigned long last_trigger = 0;
 boolean start_timer = false;
+volatile int counter = 0; //Volatile to be stored in RAM and accesible by ISRs
 
 void IRAM_ATTR buttonPressed(){
   Serial.println("Button pressed!");
   digitalWrite(led, HIGH);
   start_timer = true;
   last_trigger = millis();
+  counter++;
+  Serial.print("ISR, Counter = ");Serial.println(counter);
 }
 
 void setup() {
@@ -27,5 +30,8 @@ void loop() {
     Serial.println("LED turned off...");
     digitalWrite(led,LOW);
     start_timer = false;
+    counter++;
+    Serial.print("Loop, counter = ");
+    Serial.println(counter);
   }
 }
