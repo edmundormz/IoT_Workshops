@@ -1,9 +1,11 @@
 #define time_seconds 10
+#define timer_counter 1
 
 const int led = 13;
 const int push_button = 27;
-unsigned long now = millis();
+unsigned long now = 0;
 unsigned long last_trigger = 0;
+unsigned long previous_millis = 0;
 boolean start_timer = false;
 volatile int counter = 0; //Volatile to be stored in RAM and accesible by ISRs
 
@@ -25,13 +27,19 @@ void setup() {
 }
 
 void loop() {
-  now =millis();
+  now = millis();
   if(start_timer &&(now - last_trigger > (time_seconds*1000))){
     Serial.println("LED turned off...");
     digitalWrite(led,LOW);
     start_timer = false;
     counter++;
-    Serial.print("Loop, counter = ");
+    Serial.print("Trigger Loop, counter = ");
+    Serial.println(counter);
+  }
+  if(now - previous_millis > (timer_counter*1000)){
+    previous_millis = millis();
+    counter++;
+    Serial.print("Timer, counter = ");
     Serial.println(counter);
   }
 }
