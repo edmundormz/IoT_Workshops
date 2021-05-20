@@ -112,25 +112,25 @@ if(interruptCounter != -1){
    totalInterruptsCounter++;
 }
 
-switch(totalInterruptsCounter){
-  case 2:
-    timerAlarmDisable(timer0);
-    Serial.println("Alarm 0 Disabled");
-    break;
-  case 4:
-    timerAlarmDisable(timer1);
-    Serial.println("Alarm 1 Disabled");
-    break;
-  case 6:
-    timerAlarmDisable(timer2);
-    Serial.println("Alarm 2 Disabled");
-    break;
-  case 8:
-    timerAlarmDisable(timer3);
-    Serial.println("Alarm 3 Disabled");
-    break;
-}
-if(totalInterruptsCounter == 8){
+//switch(totalInterruptsCounter){
+//  case 2:
+//    timerAlarmDisable(timer0);
+//    Serial.println("Alarm 0 Disabled");
+//    break;
+//  case 4:
+//    timerAlarmDisable(timer1);
+//    Serial.println("Alarm 1 Disabled");
+//    break;
+//  case 6:
+//    timerAlarmDisable(timer2);
+//    Serial.println("Alarm 2 Disabled");
+//    break;
+//  case 8:
+//    timerAlarmDisable(timer3);
+//    Serial.println("Alarm 3 Disabled");
+//    break;
+//}
+if(totalInterruptsCounter == 20){
   while(1){
     
   }
