@@ -11,7 +11,7 @@ String textMessage = "";
 String lampState = "";
 const int blueLED = 13;
 
-void setup(){
+void setup() {
   // Set modem reset, enable, power pins
   pinMode(MODEM_PWKEY, OUTPUT);
   pinMode(MODEM_RST, OUTPUT);
@@ -20,9 +20,9 @@ void setup(){
   digitalWrite(MODEM_RST, HIGH);
   digitalWrite(MODEM_POWER_ON, HIGH);
 
-  pinMode(blueLED,OUTPUT);
-  digitalWrite(blueLED,LOW);
-   
+  pinMode(blueLED, OUTPUT);
+  digitalWrite(blueLED, LOW);
+
   SerialAT.begin(115200, SERIAL_8N1, MODEM_RX, MODEM_TX);
   delay(1000);
   Serial.begin(115200);               //Begin the Serial communication with PC
@@ -35,46 +35,52 @@ void setup(){
 
 
 void loop() {
-  
-  if(SerialAT.available()>0){
+
+  if (SerialAT.available() > 0) {
     textMessage = SerialAT.readString();
     Serial.print("textMessage: ");
     Serial.println(textMessage);
     delay(10);
-  }
-  if(textMessage.indexOf("ON")>=0){
-    // Turn on blueLED and save current state
-    digitalWrite(blueLED, HIGH);
-    lampState = "on";
-    Serial.println("blueLED set to ON");  
-    textMessage = "";   
-  }
-  if(textMessage.indexOf("OFF")>=0){
-    // Turn off blueLED and save current state
-    digitalWrite(blueLED, LOW);
-    lampState = "off"; 
-    Serial.println("blueLED set to OFF");
-    textMessage = ""; 
-  }
-  if(textMessage.indexOf("STATE")>=0){
-    String message = "Lamp is " + lampState;
-    sendSMS(message);
-    Serial.println("Lamp state resquest");
-    textMessage = "";
+    if (textMessage.indexOf("ON") >= 0) {
+      // Turn on blueLED and save current state
+      digitalWrite(blueLED, HIGH);
+      lampState = "on";
+      Serial.println("blueLED set to ON");
+      textMessage = "";
+      Serial.println("Deleting all messages...");
+      SerialAT.println("AT+CMGDA=\"DEL ALL\"");
+    }
+    if (textMessage.indexOf("OFF") >= 0) {
+      // Turn off blueLED and save current state
+      digitalWrite(blueLED, LOW);
+      lampState = "off";
+      Serial.println("blueLED set to OFF");
+      textMessage = "";
+      Serial.println("Deleting all messages...");
+      SerialAT.println("AT+CMGDA=\"DEL ALL\"");
+    }
+    if (textMessage.indexOf("STATE") >= 0) {
+      String message = "Lamp is " + lampState;
+      sendSMS(message);
+      Serial.println("Lamp state resquest");
+      textMessage = "";
+      Serial.println("Deleting all messages...");
+      SerialAT.println("AT+CMGDA=\"DEL ALL\"");
+    }
   }
 }
 
 // Function that sends SMS
-void sendSMS(String message){
+void sendSMS(String message) {
   // AT command to set SerialAT to SMS mode
   SerialAT.print("AT+CMGF=1\r");
   delay(100);
-  SerialAT.println("AT+CMGS=\"+523314173023\""); 
+  SerialAT.println("AT+CMGS=\"+523314173023\"");
   delay(100);
-  SerialAT.print(message); 
+  SerialAT.print(message);
   delay(100);
   // End AT command with a ^Z, ASCII code 26
-  SerialAT.println((char)26); 
+  SerialAT.println((char)26);
   delay(100);
   SerialAT.println();
   delay(5000);
