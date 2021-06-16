@@ -21,8 +21,15 @@ int cant_latas = 4;
 int cant_latas_sonar_1 = 0;
 int cant_latas_sonar_2 = 0;
 int dist_latas = 0;
+//Location variables
+String gsm_location;
 //GSM modem definitions
 const char simPIN[]   = "1111";     //SIM Card Pin
+// GPRS Connection credentials
+const char apn[] = "internet.itelcel.com";
+const char gprsUser[] = "webgprs";
+const char gprsPass[] = "webgprs2002";
+
 #define SMS_TARGET  "+523314173023" //Target phone number
 #define TINY_GSM_MODEM_SIM800      // Modem is SIM800
 #define TINY_GSM_RX_BUFFER   1024  // Set RX buffer to 1Kb
@@ -198,19 +205,89 @@ void send_sms(){
   }
 }
 
+void get_gsm_location(){
+  // Unlock your SIM card with a PIN if needed
+  if (simPIN && modem.getSimStatus() != 3 ) {
+    modem.simUnlock(simPIN);
+  }
+  SerialMon.println("Waiting for network...");
+  if (!modem.waitForNetwork(600000L)) {
+    delay(10000);
+    return;
+  }
+  if (modem.isNetworkConnected()) {
+    SerialMon.println("Network connected");
+  }
+  //SerialMon.println("Connecting to", String(apn));
+  if (!modem.gprsConnect(apn, gprsUser, gprsPass)) {
+    delay(10000);
+    return;
+  }
+  bool res = modem.isGprsConnected();
+  if(res==true){
+    SerialMon.println("Connected");
+  }else{
+    SerialMon.println("Not Connected");
+  }
+  IPAddress local = modem.localIP();
+  SerialMon.println(String(local));
+  
+  //SerialMon.println("GPRS status:", res ? "connected" : "not connected");
+
+  float lat      = 0;
+  float lon      = 0;
+  float accuracy = 0;
+  int   year     = 0;
+  int   month    = 0;
+  int   day      = 0;
+  int   hour     = 0;
+  int   minn      = 0;
+  int sec = 0;
+  for (int8_t i = 3; i; i--) {
+    SerialMon.println("Requesting current GSM location");
+    if (modem.getGsmLocation(&lat, &lon, &accuracy, &year, &month, &day, &hour,
+                             &minn, &sec)) {
+      SerialMon.println("Success location");
+      SerialMon.print(String(lat));
+      SerialMon.println(String(lon));
+      break;
+    } else {
+      SerialMon.println("Couldn't get GSM location, retrying in 15s.");
+      delay(15000L);
+    }
+  }
+   
+  SerialMon.println("Triying to get gsm location as a string: ");
+  String location = modem.getGsmLocation();
+  delay(1000);
+  //gsm_location = modem.getGsmLocation();
+  SerialMon.print("String GSM location: "); 
+  SerialMon.println(location);
+  modem.gprsDisconnect();
+  delay(5000L);
+  if (!modem.isGprsConnected()) {
+    SerialMon.println("GPRS disconnected");
+  } else {
+    SerialMon.println("GPRS disconnect: Failed.");
+  }
+}
+
 /// Ciclo de ejecución
 void loop() {
   SerialMon.println("Proyecto Inventarios");
+  /*
   read_temperature();
   read_distances();
   read_door();
   read_cans(cans_lane_1); SerialMon.println(" latas carril 1");
   read_cans(cans_lane_2); SerialMon.println(" latas carril 2");
-  SerialMon.println();
-  delay(1000);
-  SerialMon.println("Triying to send SMS");
-  send_sms();
-  while(1){
+  */
+  get_gsm_location();
+  //SerialMon.println();
+  delay(3000);
+  //SerialMon.println("Triying to send SMS");
+  //send_sms();
+  /*while(1){
     
-  }
+  }*/
 }

@@ -19,7 +19,7 @@ void setup()
    
   SerialAT.begin(115200, SERIAL_8N1, MODEM_RX, MODEM_TX);
   delay(1000);
-  Serial.begin(9600);               //Begin the Serial communication with PC
+  Serial.begin(115200);               //Begin the Serial communication with PC
   Serial.println("Starting ...");
   delay(5000);                      //Delay to let the module to connect to network, if turned on before you can remove this
   SerialAT.println("AT");            //Send AT command it will says "OK" if everything is fine

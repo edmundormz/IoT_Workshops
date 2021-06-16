@@ -13,7 +13,7 @@ NewPing sonar(TRIGGER_PIN, ECHO_PIN, MAX_DISTANCE);
 DHT dht(DHTPIN, DHTTYPE);
 
 void setup() {
-   Serial.begin(9600);
+   Serial.begin(115200);
    dht.begin();
 }
  

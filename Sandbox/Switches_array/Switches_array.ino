@@ -15,7 +15,7 @@ void loop() {
   switches_value = analogRead(switches_pin);
   Serial.println(switches_value);
   delay(500);
-  if (switches_value < 4096){
+  /*if (switches_value < 4096){
     cant_latas = 0;
   }
   if (switches_value < 1800){
@@ -32,6 +32,7 @@ void loop() {
   }
   Serial.print(cant_latas);
   Serial.println(" latas carril 1");
+  */
 }
 
 
